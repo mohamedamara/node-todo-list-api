@@ -1,0 +1,19 @@
+{
+  "name": "node-todo-list-api",
+  "version": "1.0.0",
+  "description": "Todo list API built with Node js and Express web framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedamara/node-todo-list-api.git"
+  },
+  "author": "Mohamed Amara",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohamedamara/node-todo-list-api/issues"
+  },
+  "homepage": "https://github.com/mohamedamara/node-todo-list-api#readme"
+}
