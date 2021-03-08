@@ -2,6 +2,7 @@ const express = require("express");
 const databaseConnection = require("./utils/database_connection");
 
 const app = express();
+app.use(express.json({ extended: false }));
 const port = process.env.PORT || 5000;
 
 // connect to database
