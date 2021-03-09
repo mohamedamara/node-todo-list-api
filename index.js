@@ -1,5 +1,5 @@
 const express = require("express");
-const databaseConnection = require("./utils/database_connection");
+const databaseConnection = require("./config/database_connection");
 
 const app = express();
 app.use(express.json({ extended: false }));
