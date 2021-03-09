@@ -11,8 +11,14 @@ const port = process.env.PORT || 5000;
 // connect to database
 databaseConnection();
 
+// greeting message
 app.get("/", (req, res) => {
-  res.send("Welcome to the todo list api");
+  res.json({
+    "Project Name": "Todo list API",
+    Author: "Mohamed Amara",
+    License: "MIT",
+    "Github URL": "https://github.com/mohamedamara/node-todo-list-api",
+  });
 });
 
 // middlewares to handle different routes
