@@ -8,13 +8,13 @@ exports.registerNewUser = async (req, res) => {
     await saveUserToDatabase(req.body, res);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Internal Server Error");
   }
 };
 
 const isUserAlreadyExists = async (email, response) => {
   const user = await userModel.findOne({ email });
-  if (user) return response.status(400).json({ msg: "User already exists" });
+  if (user) return response.status(409).json({ msg: "User already exists" });
 };
 
 const hashPassword = async (password) => {
@@ -32,5 +32,5 @@ const saveUserToDatabase = async (requestData, response) => {
     password,
   });
   await newUser.save();
-  response.send("User saved to database");
+  response.status(201).send("User saved to database");
 };
