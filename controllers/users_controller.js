@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/user_model");
+// load environment variables
+require("dotenv").config();
 
 exports.registerNewUser = async (req, res) => {
   try {
@@ -32,5 +35,17 @@ const saveUserToDatabase = async (requestData, response) => {
     password,
   });
   await newUser.save();
-  response.status(201).send("User saved to database");
+  const jwt = generateJsonWebToken(newUser.id);
+  response.status(201).json({ jwt });
+};
+
+const generateJsonWebToken = (userID) => {
+  const generatedToken = jwt.sign(
+    {
+      userID: userID,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+  return generatedToken;
 };
