@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user_model");
-// load environment variables
 require("dotenv").config();
 
 exports.registerNewUser = async (req, res) => {
@@ -11,13 +10,13 @@ exports.registerNewUser = async (req, res) => {
     await saveUserToDatabase(req.body, res);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-const isUserAlreadyExists = async (email, response) => {
+const isUserAlreadyExists = async (email, res) => {
   const user = await userModel.findOne({ email });
-  if (user) return response.status(409).json({ msg: "User already exists" });
+  if (user) return res.status(409).json({ message: "User already exists" });
 };
 
 const hashPassword = async (password) => {
@@ -26,7 +25,7 @@ const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-const saveUserToDatabase = async (requestData, response) => {
+const saveUserToDatabase = async (requestData, res) => {
   const { firstName, lastName, email, password } = requestData;
   const newUser = new userModel({
     firstName,
@@ -36,7 +35,7 @@ const saveUserToDatabase = async (requestData, response) => {
   });
   await newUser.save();
   const jwt = generateJsonWebToken(newUser.id);
-  response.status(201).json({ jwt });
+  res.status(201).json({ jwt });
 };
 
 const generateJsonWebToken = (userID) => {
