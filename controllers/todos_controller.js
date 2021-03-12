@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const todoModel = require("../models/todo_model");
 
 exports.getAllUserTodos = async (req, res) => {
@@ -33,35 +34,51 @@ const saveTodo = async (req, res) => {
 };
 
 exports.updateTodo = async (req, res) => {
-  const { name, email, phone, type } = req.body;
-
-  const contactFields = {};
-  if (name) contactFields.name = name;
-  if (email) contactFields.email = email;
-  if (phone) contactFields.phone = phone;
-  if (type) contactFields.type = type;
-
+  const todoId = req.params.id;
   try {
-    let contact = await Contact.findById(req.params.id);
-
-    if (!contact) return res.status(404).json({ msg: "Contact not found" });
-
-    // Make sure user owns contact
-    if (contact.user.toString() !== req.user.id)
-      return res.status(401).json({ msg: "Not authorized" });
-
-    contact = await Contact.findByIdAndUpdate(
-      req.params.id,
-      { $set: contactFields },
-      { new: true }
-    );
-
-    res.json(contact);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    if (!mongoose.Types.ObjectId.isValid(todoId))
+      return res.status(404).json({ message: "Todo not found" });
+    const todo = await todoModel.findById(todoId);
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
+    if (todo.owner.toString() !== req.userId)
+      return res.status(401).json({ message: "Unauthorized user" });
+    await updateTodo(req, res);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const updateTodo = async (req, res) => {
+  const updateTodoFields = buildUpdateTodoFields(req);
+  const updatedtodo = await todoModel.findByIdAndUpdate(
+    req.params.id,
+    { $set: updateTodoFields },
+    { new: true }
+  );
+  res.status(200).json(updatedtodo);
+};
+
+const buildUpdateTodoFields = (req) => {
+  const { todoTitle, todoContent, completed } = req.body;
+  const updateTodoFields = {};
+  if (todoTitle !== undefined) updateTodoFields.todoTitle = todoTitle;
+  if (todoContent !== undefined) updateTodoFields.todoContent = todoContent;
+  if (completed !== undefined) updateTodoFields.completed = completed;
+  return updateTodoFields;
+};
+
 exports.deleteTodo = async (req, res) => {
-  res.send("Delete todo");
+  const todoId = req.params.id;
+  try {
+    const todo = await todoModel.findById(todoId);
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
+    if (todo.owner.toString() !== req.userId)
+      return res.status(401).json({ message: "Unauthorized user" });
+    await todoModel.findByIdAndRemove(todoId);
+    res.status(200).json({ message: "Todo deleted" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
