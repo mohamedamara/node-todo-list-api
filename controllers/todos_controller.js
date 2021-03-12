@@ -71,6 +71,8 @@ const buildUpdateTodoFields = (req) => {
 exports.deleteTodo = async (req, res) => {
   const todoId = req.params.id;
   try {
+    if (!mongoose.Types.ObjectId.isValid(todoId))
+      return res.status(404).json({ message: "Todo not found" });
     const todo = await todoModel.findById(todoId);
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     if (todo.owner.toString() !== req.userId)
