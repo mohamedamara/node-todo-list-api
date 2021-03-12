@@ -1,9 +1,6 @@
 const express = require("express");
 const todosController = require("../controllers/todos_controller");
 const authVerification = require("../middlewares/auth");
-const {
-  addNewTodoValidation,
-} = require("../middlewares/validators/todos_route_validation");
 
 const router = express.Router();
 
