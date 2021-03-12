@@ -35,7 +35,6 @@ const generateJsonWebToken = (userId) => {
 exports.getLoggedUser = async (req, res) => {
   try {
     const user = await userModel.findById(req.userId).select("-password");
-    console.log(user);
     res.json(user);
   } catch (error) {
     console.error(error.message);

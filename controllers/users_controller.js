@@ -9,7 +9,7 @@ exports.registerNewUser = async (req, res) => {
     const user = await userModel.findOne({ email });
     if (user) return res.status(409).json({ message: "User already exists" });
     req.body.password = await hashPassword(password);
-    await saveUserToDatabase(req.body, res);
+    await saveUser(req.body, res);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });
@@ -22,7 +22,7 @@ const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-const saveUserToDatabase = async (requestData, res) => {
+const saveUser = async (requestData, res) => {
   const { firstName, lastName, email, password } = requestData;
   const newUser = new userModel({
     firstName,
