@@ -42,14 +42,14 @@ exports.updateTodo = async (req, res) => {
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     if (todo.owner.toString() !== req.userId)
       return res.status(401).json({ message: "Unauthorized user" });
-    await updateTodo(req, res);
+    await saveUpdatedTodo(req, res);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-const updateTodo = async (req, res) => {
+const saveUpdatedTodo = async (req, res) => {
   const updateTodoFields = buildUpdateTodoFields(req);
   const updatedtodo = await todoModel.findByIdAndUpdate(
     req.params.id,
