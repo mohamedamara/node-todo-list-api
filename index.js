@@ -10,15 +10,6 @@ const port = process.env.PORT || 5000;
 
 databaseConnection();
 
-app.get("/", (req, res) => {
-  res.json({
-    "Project Name": "Todo list API",
-    Author: "Mohamed Amara",
-    License: "MIT",
-    "Github URL": "https://github.com/mohamedamara/node-todo-list-api",
-  });
-});
-
 app.use("/api", usersRoute);
 app.use("/api", authRoute);
 app.use("/api", todosRoute);
