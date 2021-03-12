@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const todoSchema = new Schema({
+const todoSchema = mongoose.Schema({
   todoTitle: {
     type: String,
-    default: "No title",
+    default: "",
   },
   todoContent: {
     type: String,
-    required: true,
+    default: "",
   },
   completed: {
     type: Boolean,
     default: false,
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "users",
+    required: true,
   },
   date: {
     type: Date,
