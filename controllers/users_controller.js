@@ -4,19 +4,16 @@ const userModel = require("../models/user_model");
 require("dotenv").config();
 
 exports.registerNewUser = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    await isUserAlreadyExists(req.body.email, res);
-    req.body.password = await hashPassword(req.body.password);
+    const user = await userModel.findOne({ email });
+    if (user) return res.status(409).json({ message: "User already exists" });
+    req.body.password = await hashPassword(password);
     await saveUserToDatabase(req.body, res);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
-};
-
-const isUserAlreadyExists = async (email, res) => {
-  const user = await userModel.findOne({ email });
-  if (user) return res.status(409).json({ message: "User already exists" });
 };
 
 const hashPassword = async (password) => {
@@ -39,12 +36,11 @@ const saveUserToDatabase = async (requestData, res) => {
 };
 
 const generateJsonWebToken = (userID) => {
-  const generatedToken = jwt.sign(
+  return jwt.sign(
     {
       userID: userID,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
-  return generatedToken;
 };
