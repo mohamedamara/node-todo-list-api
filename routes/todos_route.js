@@ -1,12 +1,13 @@
 const express = require("express");
 const todosController = require("../controllers/todos_controller");
+const authVerification = require("../middlewares/auth");
 
 const router = express.Router();
 
 // @route     GET api/todos
 // @desc      Get all user todos
 // @access    Private
-router.get("/todos", todosController.getAllUserTodos);
+router.get("/todos", authVerification, todosController.getAllUserTodos);
 
 // @route     POST api/todos
 // @desc      Add new todo

@@ -3,7 +3,7 @@ const authController = require("../controllers/auth_controller");
 const {
   loginUserValidation,
 } = require("../middlewares/validators/auth_route_validation");
-const { authVerification } = require("../middlewares/auth");
+const authVerification = require("../middlewares/auth");
 
 const router = express.Router();
 
