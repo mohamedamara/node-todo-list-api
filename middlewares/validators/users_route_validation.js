@@ -17,7 +17,7 @@ exports.registerNewUserValidation = [
       "g"
     )
     .withMessage(
-      "Password should contain at least 8 characters in length and a combination of 1 lower case letter, 1 upper case letter, 1 number or 1 special character"
+      "Password should contain at least 8 characters in length and a combination of 1 lower case letter, 1 upper case letter, 1 number and 1 special character"
     ),
   (req, res, next) => {
     const errors = validationResult(req);
