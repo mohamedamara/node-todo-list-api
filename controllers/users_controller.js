@@ -35,10 +35,10 @@ const saveUser = async (requestData, res) => {
   res.status(201).json({ jwt });
 };
 
-const generateJsonWebToken = (userID) => {
+const generateJsonWebToken = (userId) => {
   return jwt.sign(
     {
-      userID: userID,
+      userId,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
