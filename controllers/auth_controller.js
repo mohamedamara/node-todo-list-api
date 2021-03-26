@@ -28,7 +28,7 @@ const generateJsonWebToken = (userId) => {
       userId,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "24h" }
   );
 };
 
