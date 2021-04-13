@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 exports.addNewTodoValidation = [
   body("todoTitle")
     .notEmpty()
+    .withMessage("Todo title is required")
     .isString()
     .withMessage("Todo title most be a String"),
   body("todoContent")
@@ -21,6 +22,7 @@ exports.addNewTodoValidation = [
 exports.updateTodoValidation = [
   body("todoTitle")
     .notEmpty()
+    .withMessage("Todo title is required")
     .isString()
     .withMessage("Todo title most be a String"),
   body("todoContent")
