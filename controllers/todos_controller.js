@@ -60,11 +60,10 @@ const saveUpdatedTodo = async (req, res) => {
 };
 
 const buildUpdateTodoFields = (req) => {
-  const { todoTitle, todoContent, completed } = req.body;
+  const { todoTitle, todoContent } = req.body;
   const updateTodoFields = {};
   if (todoTitle !== undefined) updateTodoFields.todoTitle = todoTitle;
   if (todoContent !== undefined) updateTodoFields.todoContent = todoContent;
-  if (completed !== undefined) updateTodoFields.completed = completed;
   return updateTodoFields;
 };
 

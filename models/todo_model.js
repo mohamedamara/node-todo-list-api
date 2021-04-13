@@ -9,10 +9,6 @@ const todoSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
