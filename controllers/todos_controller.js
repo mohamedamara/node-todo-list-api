@@ -2,10 +2,13 @@ const mongoose = require("mongoose");
 const todoModel = require("../models/todo_model");
 
 exports.getAllUserTodos = async (req, res) => {
+  const showTrash = req.params.showTrash === undefined ? false : true;
   try {
-    const contacts = await todoModel.find({ owner: req.userId }).sort({
-      date: "descending",
-    });
+    const contacts = await todoModel
+      .find({ owner: req.userId, keepInTrash: showTrash })
+      .sort({
+        date: "descending",
+      });
     res.json(contacts);
   } catch (error) {
     console.error(error.message);
@@ -69,6 +72,7 @@ const buildUpdateTodoFields = (req) => {
 
 exports.deleteTodo = async (req, res) => {
   const todoId = req.params.id;
+  const moveToTrash = req.params.moveToTrash;
   try {
     if (!mongoose.Types.ObjectId.isValid(todoId))
       return res.status(404).json({ message: "Todo not found" });
@@ -76,8 +80,17 @@ exports.deleteTodo = async (req, res) => {
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     if (todo.owner.toString() !== req.userId)
       return res.status(401).json({ message: "Unauthorized user" });
-    await todoModel.findByIdAndRemove(todoId);
-    res.status(200).json({ message: "Todo deleted" });
+    if (moveToTrash === "yes") {
+      await todoModel.findByIdAndUpdate(
+        todoId,
+        { $set: { keepInTrash: true } },
+        { new: true }
+      );
+      res.status(200).json({ message: "Todo moved to trash" });
+    } else {
+      await todoModel.findByIdAndRemove(todoId);
+      res.status(200).json({ message: "Todo deleted" });
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });
