@@ -10,6 +10,19 @@ exports.addNewTodoValidation = [
     .optional()
     .isString()
     .withMessage("Todo content most be a String"),
+  body("todoColor")
+    .optional()
+    .isHexColor()
+    .withMessage("Todo Color most be a valid Hex Color")
+    .custom(
+      (value) =>
+        value === "#fff" ||
+        value === "#f28b82" ||
+        value === "#fff475" ||
+        value === "#ccff90" ||
+        value === "#a7ffeb" ||
+        value === "#d7aefb"
+    ),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -29,6 +42,19 @@ exports.updateTodoValidation = [
     .optional()
     .isString()
     .withMessage("Todo content most be a String"),
+  body("todoColor")
+    .optional()
+    .isHexColor()
+    .withMessage("Todo Color most be a valid Hex Color")
+    .custom(
+      (value) =>
+        value === "#fff" ||
+        value === "#f28b82" ||
+        value === "#fff475" ||
+        value === "#ccff90" ||
+        value === "#a7ffeb" ||
+        value === "#d7aefb"
+    ),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -26,10 +26,11 @@ exports.addNewTodo = async (req, res) => {
 };
 
 const saveTodo = async (req, res) => {
-  const { todoTitle, todoContent } = req.body;
+  const { todoTitle, todoContent, todoColor } = req.body;
   const newTodo = new todoModel({
     todoTitle,
     todoContent,
+    todoColor,
     owner: req.userId,
   });
   const todo = await newTodo.save();
@@ -63,10 +64,11 @@ const saveUpdatedTodo = async (req, res) => {
 };
 
 const buildUpdateTodoFields = (req) => {
-  const { todoTitle, todoContent } = req.body;
+  const { todoTitle, todoContent, todoColor } = req.body;
   const updateTodoFields = {};
   if (todoTitle !== undefined) updateTodoFields.todoTitle = todoTitle;
   if (todoContent !== undefined) updateTodoFields.todoContent = todoContent;
+  if (todoColor !== undefined) updateTodoFields.todoColor = todoColor;
   return updateTodoFields;
 };
 

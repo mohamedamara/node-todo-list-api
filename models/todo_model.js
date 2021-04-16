@@ -18,6 +18,10 @@ const todoSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  todoColor: {
+    type: String,
+    default: "#fff",
+  },
   keepInTrash: {
     type: Boolean,
     default: false,
