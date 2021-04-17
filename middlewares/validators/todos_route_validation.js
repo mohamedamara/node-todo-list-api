@@ -55,6 +55,10 @@ exports.updateTodoValidation = [
         value === "#a7ffeb" ||
         value === "#d7aefb"
     ),
+  body("keepInTrash")
+    .optional()
+    .isBoolean()
+    .withMessage("keepInTrash value most be a String"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
