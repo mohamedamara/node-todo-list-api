@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const todoModel = require("../models/todo_model");
+const io = require("../config/socket_io_connection");
 
 exports.getAllUserTodos = async (req, res) => {
   try {
@@ -31,6 +32,7 @@ const saveTodo = async (req, res) => {
     owner: req.userId,
   });
   const todo = await newTodo.save();
+  io.getIO().emit("notes");
   res.status(201).json(todo);
 };
 
@@ -57,6 +59,7 @@ const saveUpdatedTodo = async (req, res) => {
     { $set: updateTodoFields },
     { new: true }
   );
+  io.getIO().emit("notes");
   res.status(200).json(updatedtodo);
 };
 
@@ -80,6 +83,7 @@ exports.deleteTodo = async (req, res) => {
     if (todo.owner.toString() !== req.userId)
       return res.status(401).json({ message: "Unauthorized user" });
     await todoModel.findByIdAndRemove(todoId);
+    io.getIO().emit("notes");
     res.status(200).json({ message: "Todo deleted" });
   } catch (error) {
     console.error(error.message);
